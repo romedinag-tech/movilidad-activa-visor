@@ -221,6 +221,11 @@ body.mapafull #cardMapa{position:fixed;inset:0;z-index:2500;margin:0;border-radi
   max-width:none;overflow:auto;padding:14px 18px}
 body.mapafull #map{height:calc(100vh - 250px)}
 body.mapafull #detalle{height:calc(100vh - 250px)}
+
+/* Pie de autoria y licencia (texto del paquete del hub, 2026-11-09) */
+.pie-licencia{font-size:12px;line-height:1.5;color:var(--mut);padding:12px 16px 20px;
+  text-align:center;border-top:1px solid var(--line);margin-top:24px}
+.pie-licencia a{color:var(--accent)}
 </style></head><body>
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
 <symbol id="i-bike" viewBox="0 0 24 24"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h3"/></symbol>
@@ -1736,4 +1741,11 @@ document.getElementById('mapDl').onclick=async()=>{
 };
 
 initFiltros(); migas(); kpis(); graficos(); tablas();
-</script></body></html>
+</script>
+<footer class="pie-licencia">
+  © 2026 Rodrigo Medina González · Ciclovías de Chile — infraestructura, demanda y territorio ·
+  Contenido bajo <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.es" rel="license">CC BY-NC 4.0</a>
+  (citar la fuente; uso comercial sólo con autorización) · Código: todos los derechos reservados ·
+  Datos de base: sus instituciones de origen.
+</footer>
+</body></html>
