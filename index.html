@@ -335,7 +335,7 @@ body.mapafull #detalle{height:calc(100vh - 250px)}
     </div>
     <div class="card">
       <h2><svg class="ic"><use href="#i-target"/></svg>La EOD contra el Censo 2024</h2>
-      <p class="desc">Cada punto es una ciudad: en el eje horizontal la participación reconstruida de la EOD, en el vertical la del Censo 2024 sobre las mismas comunas. Miden universos distintos —la EOD todos los viajes, el Censo el modo principal al trabajo o al estudio—, de modo que los niveles no coinciden; lo que valida la reconstrucción es que ordenen igual.</p>
+      <p class="desc">Cada punto es una ciudad: en el eje horizontal la participación reconstruida de la EOD, en el vertical la del Censo 2024 sobre las mismas comunas. Miden universos distintos —la EOD todos los viajes de todas las personas, el Censo sólo el medio principal al trabajo de los ocupados de 15 años o más que trabajan fuera de su vivienda, con el scooter dentro de «bicicleta»—, de modo que los niveles no coinciden; lo que valida la reconstrucción es que ordenen igual.</p>
       <div class="chartbox"><canvas id="cEodCenso"></canvas></div>
       <div class="src" id="srcCorr"></div>
       <h3>Propósito del viaje en bicicleta</h3>
@@ -392,9 +392,9 @@ body.mapafull #detalle{height:calc(100vh - 250px)}
 
   <div class="card">
     <h2><svg class="ic"><use href="#i-building"/></svg>Uso de la bicicleta por comuna (Censo 2024)</h2>
-    <p class="desc">Personas que declaran la bicicleta como modo principal de transporte al trabajo o al estudio, y qué proporción representan de quienes declaran algún modo.</p>
+    <p class="desc">Ocupados de 15 años o más que trabajan fuera de su vivienda y declaran la bicicleta (incluye scooter) como medio de transporte principal al trabajo, y qué proporción representan de quienes declaran algún medio. El Censo no pregunta por el viaje al estudio.</p>
     <div class="tw"><table id="tDem"><thead></thead><tbody></tbody></table></div>
-    <div class="src">Fuente: Censo de Población y Vivienda 2024, INE. El universo son las personas que declaran un modo de transporte, no la población total. Siniestros: CONASET 2020-2024.</div>
+    <div class="src">Fuente: Censo de Población y Vivienda 2024, INE. El universo de la pregunta de transporte (P45) son los ocupados de 15 años o más que trabajan fuera de su vivienda, no la población total ni los estudiantes. Siniestros: CONASET 2020-2024.</div>
   </div>
 </section>
 
@@ -528,9 +528,9 @@ function kpis(){
   ].map(k=>`<div class="kpi"><div class="label">${k[0]}</div><div class="v">${k[1]}</div><div class="s">${k[2]}</div></div>`).join('');
 
   document.getElementById('kDem').innerHTML=[
-    ['Usan la bicicleta',fmt(bici),'personas, modo principal al trabajo o estudio'],
-    ['Participación modal',pct(modos?100*bici/modos:NaN,2),'de quienes declaran algún modo (Censo 2024)'],
-    ['Ciclistas cubiertos',pct(bici?100*bcub/bici:NaN),'viven a menos de 300 m de una ciclovía'],
+    ['Al trabajo en bicicleta',fmt(bici),'ocupados, medio principal (incluye scooter)'],
+    ['Participación modal',pct(modos?100*bici/modos:NaN,2),'de los ocupados que declaran medio al trabajo (Censo 2024)'],
+    ['Ciclistas cubiertos',pct(bici?100*bcub/bici:NaN),'de esos ocupados vive a menos de 300 m de una ciclovía'],
     ['Contadores de flujo',fmt(D.contadores.filter(c=>enFiltro(c.c)).length),'puntos de medición permanente (MINVU)'],
     ['Siniestros con ciclista',fmt(sini),`${fmt(sinf)} con resultado de muerte, 2020-2024`],
   ].map(k=>`<div class="kpi"><div class="label">${k[0]}</div><div class="v">${k[1]}</div><div class="s">${k[2]}</div></div>`).join('');
@@ -753,7 +753,7 @@ function graficos(){
       label:c=>c.raw.n+': EOD '+fmt(c.raw.x,2)+' % · Censo '+fmt(c.raw.y,2)+' %'}}},
       scales:{x:{title:{display:true,text:'EOD reconstruida (%)',color:mut,font:{size:10}},
                  grid:{color:line},ticks:{color:mut,font:{size:10}},beginAtZero:true},
-              y:{title:{display:true,text:'Censo 2024 (%)',color:mut,font:{size:10}},
+              y:{title:{display:true,text:'Censo 2024, al trabajo (%)',color:mut,font:{size:10}},
                  grid:{color:line},ticks:{color:mut,font:{size:10}},beginAtZero:true}}})});
   const r=corr(ec2.map(x=>x.bici_pct),ec2.map(x=>x.censo));
   document.getElementById('srcCorr').textContent=
@@ -958,10 +958,10 @@ function fichaTerritorio(){
   let h='<div style="font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;'
       +'font-weight:700;color:var(--ink-lo);margin-bottom:4px">Censo 2024</div>'
     +f('Habitantes',fmt(pob))
-    +f('Declaran algún modo',fmt(modos))
-    +f('Usan la bicicleta',fmt(bici))
+    +f('Ocupados que declaran medio al trabajo',fmt(modos))
+    +f('Van al trabajo en bicicleta',fmt(bici))
     +f('Participación modal',pct(modos?100*bici/modos:NaN,2))
-    +f('Ciclistas a menos de 300 m de la red',pct(bici?100*bcub/bici:NaN))
+    +f('Ocupados ciclistas a menos de 300 m de la red',pct(bici?100*bcub/bici:NaN))
     +f('Kilómetros de red existente',fmt(kme,1)+' km')
     +f('Siniestros con ciclista (2020-2024)',fmt(sini));
   h+='<div style="font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;font-weight:700;'
@@ -975,7 +975,7 @@ function fichaTerritorio(){
       +f('Viajes en bicicleta',fmt(c.bici_viajes))
       +f('Participación de la bicicleta',pct(c.bici_pct,2))
       +f('Cifra oficial del informe',c.ok?pct(c.ofi,2):'no utilizable')
-      +(c.censo?f('Censo sobre las mismas comunas',pct(c.censo,2)):'');
+      +(c.censo?f('Censo (al trabajo) sobre las mismas comunas',pct(c.censo,2)):'');
     // Partición modal y propósito: los KPI del tablero de movilidad del repo.
     if(k.pct_publico!=null||k.pct_trabajo!=null){
       h+='<div style="font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;'
@@ -1077,7 +1077,7 @@ function tablas(){
 
 const IND=[
   {k:'bp',t:'Uso de la bicicleta',s:'%',inv:false,
-   d:'Participación de la bicicleta como modo principal al trabajo o al estudio, sobre quienes declaran algún modo (Censo 2024). Verde donde más se pedalea, rojo donde prácticamente nadie lo hace.'},
+   d:'Participación de la bicicleta (incluye scooter) como medio principal al trabajo, sobre los ocupados de 15 años o más que trabajan fuera de su vivienda y declaran algún medio (Censo 2024). Verde donde más se pedalea, rojo donde prácticamente nadie lo hace.'},
   {k:'cob',t:'Cobertura: población a menos de 300 m de la red',s:'%',inv:false,
    d:'Porcentaje de habitantes de la zona cuya manzana está a menos de 300 m de un tramo existente. Es el umbral que usa el índice de ciclo-inclusión de SECTRA.'},
   {k:'d',t:'Distancia a la ciclovía más cercana',s:' m',inv:true,
